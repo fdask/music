@@ -15,8 +15,8 @@ Press right arrow for a sharp.
 Careful, we're timing!
 
 ## Controls
-Type the letter note, left arrow for flat,
-right arrow for sharp.  Enter to submit.  Q to quit.
+Type the `letter note`, `left arrow` for flat,
+`right arrow` for sharp.  `Enter` to submit.  `q` to quit.
 
 ## Config
 `includes/config.inc` to set the save directory.
