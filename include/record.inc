@@ -46,11 +46,19 @@ class Record {
         if ((time() - $this->startTime) > $this->duration) {
             echo "Time is up!\n";
             $this->fullDuration = true;
+
+            $this->save();
         } else {
             $this->fullDuration = false;
         }
-            
-        $this->save();
+    }
+
+    public function getStr() {
+        $won = count($this->rights);
+        $lost = count($this->wrongs);
+
+        echo "Got $won/$lost wins/losses.\n";
+        echo "Average time was " . $this->getAverageTime() . " seconds.\n";
     }
 
     public function save() {
