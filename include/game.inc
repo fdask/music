@@ -216,6 +216,8 @@ class Game {
                     break;
                 case Keypress::backspace():
                     $this->guess = null;
+                    $this->sharp = false;
+                    $this->flat = false;
 
                     break;
                 case Keypress::leftArrow():
