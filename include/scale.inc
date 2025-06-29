@@ -101,6 +101,24 @@ class Scale {
         return $x;
     }
 
+    public function skipSemiTones($startNote, $count = 0, $flatsOrSharps = null, $direction = null) {
+        if (is_null($flatsOrSharps) || $flatsOrSharps == Scale::$flats) {
+            $scale = Scale::$flatsArray;
+        } else {
+            $scale = Scale::$sharpsArray;
+        }
+
+        if (is_null($direction)) {
+            $direction = Scale::$dirUp;
+        } 
+
+        $startPos = $this->getPosInArray($startNote, $flatsOrSharps); 
+
+        $endPos = $this->rotate($startPos, $flatsOrSharps, $direction, $count);
+
+        return $scale[$endPos];
+    }
+
     public function rotate($i, $flatsOrSharps = null, $direction = null, $count = 0) {
         if (is_null($flatsOrSharps) || $flatsOrSharps == Scale::$flats) {
             $scale = Scale::$flatsArray;
