@@ -123,20 +123,20 @@ class Game {
 
                 echo "\n";
 
-                // see if our time has expired
-                $secs = time() - $this->record->getStartTime();
-                $duration = $this->record->getDuration();
-
-                if ($secs > $duration) {
-                    $this->gameOver();
-                }
-
                 if (in_array($guess, $allValid)) {
                     echo "YOU GUESSED RIGHT!";
                     $this->record->addRight($secs);
                 } else {
                     echo "YOU GUESSED WRONG! (Could have been " . implode(", ", $allValid) . ")";
                     $this->record->addWrong($secs);
+                }
+
+                // see if our time has expired
+                $secs = time() - $this->record->getStartTime();
+                $duration = $this->record->getDuration();
+
+                if ($secs > $duration) {
+                    $this->gameOver();
                 }
             }
         }
@@ -211,6 +211,7 @@ class Game {
 
                     break;
                 case 'q':
+                    $this->record->setDuration();
                     $this->gameOver();
 
                     break;
@@ -253,7 +254,27 @@ class Game {
 
         echo "\n";
 
+        // init final stats (without current)
+        $s = new Stats();
+     
+        // stop the record (saves it)
         $this->record->stop();
+
+        if ($this->record->getFullDuration()) {
+            echo implode("\n", $s->compare($this->record)) . "\n";
+        }
+
+        // save the stats without current
+        $ss = $s;
+
+        // add the current
+        $s->addRecord($this->record);
+
+        // recalculate new stats
+        $s->recalc();
+
+        // display the difference between the two stats
+        echo $s->getStats($ss) . "\n";
 
         exit;
     }
@@ -261,7 +282,7 @@ class Game {
     public function __toString() {
         $ret = "\n\n";
 
-        $ret .= "Score: " . $this->record->getScore() . " Time Avg: " . $this->record->getAverageTime() . "\n";
+        $ret .= "Score: " . $this->record->getScore() . " Average Time: " . $this->record->getAverageTime() . " secs\n";
         $ret .= $this->tab;
         $ret .= "Guess: " . $this->guess;
 

@@ -16,7 +16,11 @@ class Timer {
             $this->stop();
         }
 
-        return round($this->stop - $this->start, 2);
+        $ret = round($this->stop - $this->start, 2);
+
+        $this->reset();
+
+        return $ret;
     }
 
     public function reset() {

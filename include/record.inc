@@ -44,13 +44,14 @@ class Record {
 
     public function stop() {
         if ((time() - $this->startTime) > $this->duration) {
-            echo "Time is up!\n";
+            echo "\nTime is up!\n";
             $this->fullDuration = true;
-
-            $this->save();
         } else {
             $this->fullDuration = false;
+            $this->setDuration();
         }
+
+        $this->save();
     }
 
     public function getStr() {
@@ -69,9 +70,17 @@ class Record {
         }
     }
 
+    public function getRights() {
+        return $this->rights;
+    }
+
+    public function getWrongs() {
+        return $this->wrongs;
+    }
+
     public function getAverageTime() {
         $times = array_merge($this->rights, $this->wrongs);
-
+        
         if (count($times) > 0) {
             return round(array_sum($times) / count($times), 3);
         }
@@ -93,5 +102,13 @@ class Record {
         }
 
         return 0;
+    }
+
+    public function getFullDuration() {
+        return $this->fullDuration;
+    }
+
+    public function setDuration() {
+        $this->duration = time() - $this->startTime;
     }
 }

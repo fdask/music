@@ -1,5 +1,24 @@
 <?php
 class Scale {
+    public static $majorIntervals = array(
+        'W',
+        'W',
+        'H',
+        'W',
+        'W',
+        'W',
+        'H'
+    );
+
+    public static $intervalsArray = array(
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+    );
+
     public static $flatsArray = array(
         'A♭',
         'A',
@@ -53,6 +72,34 @@ class Scale {
     public static $sharps = "SHARPS";
     public static $dirUp = "UP";
     public static $dirDown = "DOWN";
+
+    /**
+     * given a root, and a position number, return the note
+     * 
+     * @param string $root the starting note, alphabetical
+     * @param int $position what position of the scale do you want?
+     * @param null|string $flatsOrSharps is the scale using flats or sharps
+     */
+    public function getMajorScalePosition($root, $position, $flatsOrSharps = null) {
+        $startPos = $this->getPosInArray($root, $flatsOrSharps);
+        $endPos = $startPos;
+
+        // now calculate how far we have to move
+        for ($x = 2; $x <= $position; $x++) {
+            $interval = Scale::$majorIntervals[$x - 2];
+
+            if ($interval == "W") {
+                $endPos += 2;        
+            } else if ($interval == "H") {
+                $endPos += 1;
+            }
+        }
+
+        // rotate
+        $x = $this->rotate($startPos, $flatsOrSharps, Scale::$dirUp, $endPos - $startPos);
+
+        return $x;
+    }
 
     public function rotate($i, $flatsOrSharps = null, $direction = null, $count = 0) {
         if (is_null($flatsOrSharps) || $flatsOrSharps == Scale::$flats) {
@@ -132,5 +179,22 @@ class Scale {
         }
 
         return $scale[$newPos];
+    }
+
+    public static function getIntervalEnding($int) {
+        switch ($int) {
+            case 2:
+                return "nd";
+                break;
+            case 3:
+                return "rd";
+                break;
+            case 4:
+            case 5:
+            case 6:
+            case 7:
+                return "th";
+                break;
+        }
     }
 }
